@@ -16,6 +16,9 @@
 		64CEC3641C00A6BB00A27B92 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64CEC3631C00A6BB00A27B92 /* LoginViewController.swift */; };
 		64CEC3661C00AD6400A27B92 /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64CEC3651C00AD6400A27B92 /* FavoriteViewController.swift */; };
 		64CEC3681C00B19C00A27B92 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64CEC3671C00B19C00A27B92 /* Network.swift */; };
+		64CEC36B1C00B93200A27B92 /* NewTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64CEC36A1C00B93200A27B92 /* NewTokenResponse.swift */; };
+		64CEC36D1C00BC4B00A27B92 /* LoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64CEC36C1C00BC4B00A27B92 /* LoginResponse.swift */; };
+		64CEC36F1C00BC9000A27B92 /* NewSessionResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64CEC36E1C00BC9000A27B92 /* NewSessionResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +54,9 @@
 		64CEC3631C00A6BB00A27B92 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		64CEC3651C00AD6400A27B92 /* FavoriteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
 		64CEC3671C00B19C00A27B92 /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
+		64CEC36A1C00B93200A27B92 /* NewTokenResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewTokenResponse.swift; sourceTree = "<group>"; };
+		64CEC36C1C00BC4B00A27B92 /* LoginResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginResponse.swift; sourceTree = "<group>"; };
+		64CEC36E1C00BC9000A27B92 /* NewSessionResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewSessionResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +107,7 @@
 		64CEC3331C00A49100A27B92 /* TheMovieDB */ = {
 			isa = PBXGroup;
 			children = (
+				64CEC3691C00B92100A27B92 /* Models */,
 				64CEC3621C00A69700A27B92 /* ViewControllers */,
 				64CEC3341C00A49100A27B92 /* AppDelegate.swift */,
 				64CEC3381C00A49100A27B92 /* Main.storyboard */,
@@ -137,6 +144,16 @@
 				64CEC3651C00AD6400A27B92 /* FavoriteViewController.swift */,
 			);
 			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		64CEC3691C00B92100A27B92 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				64CEC36A1C00B93200A27B92 /* NewTokenResponse.swift */,
+				64CEC36C1C00BC4B00A27B92 /* LoginResponse.swift */,
+				64CEC36E1C00BC9000A27B92 /* NewSessionResponse.swift */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -275,8 +292,11 @@
 			files = (
 				64CEC3641C00A6BB00A27B92 /* LoginViewController.swift in Sources */,
 				64CEC3681C00B19C00A27B92 /* Network.swift in Sources */,
+				64CEC36D1C00BC4B00A27B92 /* LoginResponse.swift in Sources */,
 				64CEC3661C00AD6400A27B92 /* FavoriteViewController.swift in Sources */,
+				64CEC36F1C00BC9000A27B92 /* NewSessionResponse.swift in Sources */,
 				64CEC3351C00A49100A27B92 /* AppDelegate.swift in Sources */,
+				64CEC36B1C00B93200A27B92 /* NewTokenResponse.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

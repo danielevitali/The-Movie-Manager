@@ -11,9 +11,7 @@ import UIKit
 
 class FavoriteViewController: UIViewController {
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @IBAction func loginClick(sender: AnyObject) {
         performSegueWithIdentifier("loginSegue", sender: self)
     }
-    
 }
