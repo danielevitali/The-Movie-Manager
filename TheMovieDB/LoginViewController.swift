@@ -68,7 +68,7 @@ class LoginViewController: UIViewController {
         textField.rightView = ivWarning
     }
     
-    func requestToken() {
+    private func requestToken() {
         let url = Network.getUrlForNewToken()
         let session = NSURLSession.sharedSession()
         let request = NSMutableURLRequest(URL: url)
@@ -92,7 +92,7 @@ class LoginViewController: UIViewController {
         task.resume()
     }
     
-    func login(token: String) {
+    private func login(token: String) {
         let url = Network.getUrlForLogin(token, email: email!, password: password!)
         let session = NSURLSession.sharedSession()
         let request = NSURLRequest(URL: url)
@@ -115,7 +115,7 @@ class LoginViewController: UIViewController {
         task.resume()
     }
     
-    func newSession(token: String) {
+    private func newSession(token: String) {
         let url = Network.getUrlForNewSession(token)
         let session = NSURLSession.sharedSession()
         let request = NSURLRequest(URL: url)
@@ -130,14 +130,37 @@ class LoginViewController: UIViewController {
                 let newSessionResponse = Network.parseNewSessionResponse(data)
                 if newSessionResponse.success {
                     Network.sessionId = newSessionResponse.sessionId
-                    self.dismissViewControllerAnimated(true, completion: nil)
+                    self.getUserInfo()
+                    return
                 }
             }
+            self.showLoginError()
         })
         task.resume()
     }
     
-    func showLoginError() {
+    private func getUserInfo() {
+        let url = Network.getUrlForAccountInfo()
+        let session = NSURLSession.sharedSession()
+        let request = NSURLRequest(URL: url!)
+        let task = session.dataTaskWithRequest(request, completionHandler: { data, response, error in
+            
+            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
+                self.showLoginError()
+                return
+            }
+            
+            if let data = data where error == nil {
+                let accountInfoResponse = Network.parseAccountInfoResponse(data)
+                User.getInstance().setUserInfo(accountInfoResponse)
+                return
+            }
+            self.showLoginError()
+        })
+        task.resume()
+    }
+    
+    private func showLoginError() {
         dispatch_async(dispatch_get_main_queue(), {
             let alert = UIAlertController(title: "Error", message: "Login failed", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.Default, handler: nil))
