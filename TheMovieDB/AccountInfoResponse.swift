@@ -12,11 +12,11 @@ class AccountInfoResponse {
     
     let id: Int
     let username: String
-    let name: String
+    let name: String?
     
     init(response: NSDictionary) {
         id = response["id"] as! Int
         username = response["username"] as! String
-        name = response["name"] as! String
+        name = response["name"] as? String
     }
 }

@@ -11,11 +11,14 @@ import UIKit
 
 class LoginViewController: UIViewController {
     
-    @IBOutlet weak var tfEmail: UITextField!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var tfUsername: UITextField!
     @IBOutlet weak var tfPassword: UITextField!
+    @IBOutlet weak var btnLogin: UIButton!
     
-    var email: String?
+    var username: String?
     var password: String?
+    var userToken: String?
     var tapRecognizer: UITapGestureRecognizer!
     
     override func viewWillAppear(animated: Bool) {
@@ -39,12 +42,12 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func loginClick(sender: AnyObject) {
-        email = tfEmail.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        if let email = email where email != "" {
-            tfEmail.rightView = nil
+        username = tfUsername.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        if let email = username where email != "" {
+            tfUsername.rightView = nil
         } else {
-            showWarning(tfEmail)
-            email = nil
+            showWarning(tfUsername)
+            username = nil
         }
         
         password = tfPassword.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
@@ -55,7 +58,11 @@ class LoginViewController: UIViewController {
             password = nil
         }
         
-        if email != nil && password != nil {
+        if username != nil && password != nil {
+            tfUsername.enabled = false
+            tfPassword.enabled = false
+            btnLogin.enabled = false
+            activityIndicator.startAnimating()
             requestToken()
         }
     }
@@ -69,11 +76,9 @@ class LoginViewController: UIViewController {
     }
     
     private func requestToken() {
-        let url = Network.getUrlForNewToken()
+        let request = Network.getRequestForNewToken()
         let session = NSURLSession.sharedSession()
-        let request = NSMutableURLRequest(URL: url)
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        let task = session.dataTaskWithRequest(request, completionHandler: { data, response, error in
+        session.dataTaskWithRequest(request, completionHandler: { data, response, error in
             
             guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
                 self.showLoginError()
@@ -83,20 +88,19 @@ class LoginViewController: UIViewController {
             if let data = data where error == nil {
                 let newTokenResponse = Network.parseNewTokenResponse(data)
                 if newTokenResponse.success {
-                    self.login(newTokenResponse.requestToken)
+                    self.userToken = newTokenResponse.requestToken
+                    self.login()
                     return
                 }
             }
             self.showLoginError()
-        })
-        task.resume()
+        }).resume()
     }
     
-    private func login(token: String) {
-        let url = Network.getUrlForLogin(token, email: email!, password: password!)
+    private func login() {
+        let request = Network.getRequestForLogin(userToken!, username: username!, password: password!)
         let session = NSURLSession.sharedSession()
-        let request = NSURLRequest(URL: url)
-        let task = session.dataTaskWithRequest(request, completionHandler: { data, response, error in
+        session.dataTaskWithRequest(request, completionHandler: { data, response, error in
             
             guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
                 self.showLoginError()
@@ -106,20 +110,18 @@ class LoginViewController: UIViewController {
             if let data = data where error == nil {
                 let loginResponse = Network.parseLoginResponse(data)
                 if loginResponse.success {
-                    self.newSession(loginResponse.requestToken)
+                    self.newSession()
                     return
                 }
             }
             self.showLoginError()
-        })
-        task.resume()
+        }).resume()
     }
     
-    private func newSession(token: String) {
-        let url = Network.getUrlForNewSession(token)
+    private func newSession() {
+        let request = Network.getRequestForNewSession(userToken!)
         let session = NSURLSession.sharedSession()
-        let request = NSURLRequest(URL: url)
-        let task = session.dataTaskWithRequest(request, completionHandler: { data, response, error in
+        session.dataTaskWithRequest(request, completionHandler: { data, response, error in
             
             guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
                 self.showLoginError()
@@ -135,15 +137,13 @@ class LoginViewController: UIViewController {
                 }
             }
             self.showLoginError()
-        })
-        task.resume()
+        }).resume()
     }
     
     private func getUserInfo() {
-        let url = Network.getUrlForAccountInfo()
+        let request = Network.getRequestForAccountInfo()
         let session = NSURLSession.sharedSession()
-        let request = NSURLRequest(URL: url!)
-        let task = session.dataTaskWithRequest(request, completionHandler: { data, response, error in
+        session.dataTaskWithRequest(request!, completionHandler: { data, response, error in
             
             guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
                 self.showLoginError()
@@ -153,17 +153,25 @@ class LoginViewController: UIViewController {
             if let data = data where error == nil {
                 let accountInfoResponse = Network.parseAccountInfoResponse(data)
                 User.getInstance().setUserInfo(accountInfoResponse)
+                self.activityIndicator.stopAnimating()
+                self.dismissViewControllerAnimated(true, completion: nil)
                 return
             }
             self.showLoginError()
-        })
-        task.resume()
+        }).resume()
     }
     
     private func showLoginError() {
         dispatch_async(dispatch_get_main_queue(), {
+            
+            self.activityIndicator.stopAnimating()
+            
             let alert = UIAlertController(title: "Error", message: "Login failed", preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.Default, handler: nil))
+            alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.Default, handler: { action in
+                self.btnLogin.enabled = true
+                self.tfUsername.enabled = true
+                self.tfPassword.enabled = true
+            }))
             alert.addAction(UIAlertAction(title: "Retry", style: UIAlertActionStyle.Default, handler: { action in
                 self.requestToken()
             }))

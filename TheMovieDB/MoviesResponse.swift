@@ -8,15 +8,15 @@
 
 import Foundation
 
-class FavoriteMoviesResponse {
+class MoviesResponse {
     
-    var favorieMovies: [MovieResponse]
+    var movies: [MovieResponse]
     
     init(response: NSDictionary) {
-        favorieMovies = [MovieResponse]()
+        movies = [MovieResponse]()
         let list = response["results"] as! [AnyObject]
         for movie in list {
-            favorieMovies.append(MovieResponse(response: movie as! NSDictionary))
+            movies.append(MovieResponse(response: movie as! NSDictionary))
         }
     }
     

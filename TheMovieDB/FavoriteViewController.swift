@@ -11,22 +11,11 @@ import UIKit
 
 class FavoriteViewController: MoviesViewController {
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var btnLogin: UIButton!
     @IBOutlet weak var tblFavoriteMovies: UITableView!
     @IBOutlet weak var lblNoFavoriteMovies: UILabel!
-    
-    var activityIndicator: UIActivityIndicatorView!
-    var favoriteMovies: [Movie]?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        activityIndicator = UIActivityIndicatorView(frame: CGRectMake(0,0, 50, 50))
-        activityIndicator!.center = self.view.center
-        activityIndicator!.hidesWhenStopped = true
-        activityIndicator!.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
-        view.addSubview(activityIndicator!)
-    }
-    
+        
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         tblFavoriteMovies.hidden = true
@@ -49,13 +38,12 @@ class FavoriteViewController: MoviesViewController {
     }
     
     private func fetchFavoriteMovies() {
-        activityIndicator!.startAnimating()
+        activityIndicator.startAnimating()
         
         let accountId = User.getInstance().accountId!
-        let url = Network.getUrlForFavoriteMovies(accountId)
+        let request = Network.getRequestForFavoriteMovies(accountId)
         let session = NSURLSession.sharedSession()
-        let request = NSURLRequest(URL: url!)
-        session.dataTaskWithRequest(request, completionHandler: { data, response, error in
+        session.dataTaskWithRequest(request!, completionHandler: { data, response, error in
             
             guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
                 self.showFetchFavoriteMoviesError()
@@ -63,9 +51,9 @@ class FavoriteViewController: MoviesViewController {
             }
             
             if let data = data where error == nil {
-                let favoriteMoviesResponse = Network.parseFavoriteMoviesResponse(data)
+                let moviesResponse = Network.parseMoviesResponse(data)
                 var favoriteMovies = [Movie]()
-                for movieResponse in favoriteMoviesResponse.favorieMovies {
+                for movieResponse in moviesResponse.movies {
                     favoriteMovies.append(Movie(response: movieResponse))
                 }
                 User.getInstance().favoriteMovies = favoriteMovies
@@ -81,13 +69,16 @@ class FavoriteViewController: MoviesViewController {
     }
     
     private func updateUI() {
-        favoriteMovies = User.getInstance().favoriteMovies
-        if favoriteMovies != nil {
-            tblFavoriteMovies.hidden = false
-            lblNoFavoriteMovies.hidden = true
-        } else {
-            tblFavoriteMovies.hidden = true
-            lblNoFavoriteMovies.hidden = false
+        activityIndicator.stopAnimating()
+        movies = User.getInstance().favoriteMovies
+        if let movies = movies {
+            if movies.isEmpty {
+                tblFavoriteMovies.hidden = true
+                lblNoFavoriteMovies.hidden = false
+            } else {
+                tblFavoriteMovies.hidden = false
+                lblNoFavoriteMovies.hidden = true
+            }
         }
         tblFavoriteMovies.reloadData()
     }
