@@ -68,6 +68,9 @@ class MovieDetailsViewController: UIViewController {
                         self.btnFavorite.image = UIImage(named: "ic_favorite")
                     }
                     self.isFavorite = !self.isFavorite
+                    self.topBar.leftBarButtonItem?.enabled = true
+                    self.btnFavorite.enabled = true
+                    self.activityIndicator.stopAnimating()
                 })
                 return
             }

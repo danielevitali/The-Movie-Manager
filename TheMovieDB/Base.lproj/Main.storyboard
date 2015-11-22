@@ -523,6 +523,10 @@
         <scene sceneID="Tkd-OC-uHL">
             <objects>
                 <viewController hidesBottomBarWhenPushed="YES" id="TDU-rg-4jo" customClass="MovieDetailsViewController" customModule="TheMovieDB" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="lyv-OW-WtD"/>
+                        <viewControllerLayoutGuide type="bottom" id="aqh-MN-Zfn"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="oJi-ha-oFj">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
