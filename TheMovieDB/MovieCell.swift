@@ -15,7 +15,8 @@ class MovieCell: UITableViewCell {
     @IBOutlet weak var lblTitle: UILabel!
     
     func setMovie(movie: Movie) {
-        let posterImage = UIImage(data: NSData(contentsOfURL: NSURL(string: movie.imageUrl)!)!)
+        let url = Network.getUrlForImage(movie.imageName, size: "w300")
+        let posterImage = UIImage(data: NSData(contentsOfURL: url)!)
         imgPoster.image = posterImage
         lblTitle.text = movie.title
     }

@@ -20,6 +20,8 @@ class Network {
     private static let FAVORITE_MOVIES_PATH = "/account/{id}/favorite/movies"
     private static let MOVIES_BY_GENRE_PATH = "/genre/{id}/movies"
     
+    private static let BASE_IMAGE_URL = "https://image.tmdb.org/t/p/{size}/{name}"
+    
     private static let genreMap: [MovieGenre : String] = [
         .Action: "28",
         .SciFi: "878",
@@ -127,6 +129,13 @@ class Network {
         let request = NSMutableURLRequest(URL: url)
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         return request
+    }
+    
+    static func getUrlForImage(name: String, size: String) -> NSURL {
+        var baseImageUrl = BASE_IMAGE_URL
+        baseImageUrl.replaceRange(BASE_IMAGE_URL.rangeOfString("{size}")!, with: size)
+            baseImageUrl.replaceRange(baseImageUrl.rangeOfString("{name}")!, with: name)
+        return NSURL(string: baseImageUrl)!
     }
 
     private static func escapedParameters(parameters: [String : String]) -> String {

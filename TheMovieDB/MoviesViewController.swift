@@ -12,6 +12,7 @@ import UIKit
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var movies: [Movie]?
+    var selectedMovie: Movie!
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let favoriteMovies = movies {
@@ -32,6 +33,12 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     private func showMovieDetails(movie: Movie) {
-        
+        selectedMovie = movie
+        performSegueWithIdentifier("movieDetailsSegue", sender: self)
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let destionationViewController = segue.destinationViewController as! MovieDetailsViewController
+        destionationViewController.movie = selectedMovie
     }
 }

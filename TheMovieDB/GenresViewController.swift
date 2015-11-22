@@ -17,6 +17,10 @@ class GenresViewController: MoviesViewController {
     var genre: MovieGenre?
     
     func fetchMovies(genre: MovieGenre) {
+        if self.genre == genre {
+            return
+        }
+        
         self.genre = genre
         tblMovies.hidden = true
         activityIndicator.startAnimating()

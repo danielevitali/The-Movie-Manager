@@ -12,12 +12,12 @@ class Movie {
     
     let id: Int
     let title: String
-    let imageUrl: String
+    let imageName: String
     
     init(response: MovieResponse) {
         self.id = response.id
         self.title = response.title
-        self.imageUrl = response.posterPath
+        self.imageName = response.posterPath
     }
     
 }

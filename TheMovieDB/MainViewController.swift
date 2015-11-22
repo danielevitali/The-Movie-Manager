@@ -9,18 +9,24 @@
 import Foundation
 import UIKit
 
-class MainViewController: UITabBarController {
+class MainViewController: UITabBarController, UITabBarControllerDelegate {
     
     private static let GENRES_ORDER = [MovieGenre.SciFi, MovieGenre.Comedy, MovieGenre.Action]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let viewControllers = viewControllers {
-            for index in viewControllers.indices {
-                if viewControllers[index] is GenresViewController {
-                    (viewControllers[index] as! GenresViewController).fetchMovies(MainViewController.GENRES_ORDER[index])
-                }
-            }
+        delegate = self
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        (viewControllers![0] as! GenresViewController).fetchMovies(MainViewController.GENRES_ORDER[0])
+    }
+    
+    func tabBarController(tabBarController: UITabBarController, didSelectViewController viewController: UIViewController) {
+        if viewController is GenresViewController {
+            let index = viewControllers!.indexOf(viewController)!
+            (viewController as! GenresViewController).fetchMovies(MainViewController.GENRES_ORDER[index])
         }
     }
     
