@@ -19,6 +19,7 @@ class Network {
     private static let ACCOUNT_INFO_PATH = "/account"
     private static let FAVORITE_MOVIES_PATH = "/account/{id}/favorite/movies"
     private static let MOVIES_BY_GENRE_PATH = "/genre/{id}/movies"
+    private static let ADD_REMOVE_FAVORITE_MOVIE_PATH = "/account/{id}/favorite"
     
     private static let BASE_IMAGE_URL = "https://image.tmdb.org/t/p/{size}/{name}"
     
@@ -129,6 +130,23 @@ class Network {
         let request = NSMutableURLRequest(URL: url)
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         return request
+    }
+    
+    static func getRequestForAddRemoveFavoriteMovie(accountId: Int, movieId: Int, favorite: Bool) -> NSMutableURLRequest? {
+        if let sessionId = sessionId {
+            let params = [
+                "api_key" : API_KEY,
+                "session_id" : sessionId
+            ]
+            var addRemoveFavoriteMoviePath = ADD_REMOVE_FAVORITE_MOVIE_PATH
+            addRemoveFavoriteMoviePath.replaceRange(ADD_REMOVE_FAVORITE_MOVIE_PATH.rangeOfString("{id}")!, with: String(accountId))
+            let url = NSURL(string: (BASE_URL + addRemoveFavoriteMoviePath + escapedParameters(params)))!
+            let request = NSMutableURLRequest(URL: url)
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            //TODO add json and POST
+            return request
+        }
+        return nil
     }
     
     static func getUrlForImage(name: String, size: String) -> NSURL {

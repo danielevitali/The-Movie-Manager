@@ -531,13 +531,19 @@
                                 <animations/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             </imageView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="6Ul-Og-6v3">
+                                <rect key="frame" x="290" y="290" width="20" height="20"/>
+                                <animations/>
+                            </activityIndicatorView>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="BM9-B6-uJO" firstAttribute="top" secondItem="oJi-ha-oFj" secondAttribute="top" id="0xV-9q-cLD"/>
+                            <constraint firstItem="6Ul-Og-6v3" firstAttribute="centerY" secondItem="oJi-ha-oFj" secondAttribute="centerY" id="7Q2-NH-JqJ"/>
                             <constraint firstItem="BM9-B6-uJO" firstAttribute="leading" secondItem="oJi-ha-oFj" secondAttribute="leading" id="FGw-0X-yeU"/>
                             <constraint firstAttribute="bottom" secondItem="BM9-B6-uJO" secondAttribute="bottom" id="MQ2-HI-CPv"/>
+                            <constraint firstItem="6Ul-Og-6v3" firstAttribute="centerX" secondItem="oJi-ha-oFj" secondAttribute="centerX" id="k99-sW-06B"/>
                             <constraint firstAttribute="trailing" secondItem="BM9-B6-uJO" secondAttribute="trailing" id="ydB-8p-FJH"/>
                         </constraints>
                     </view>
@@ -549,6 +555,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="activityIndicator" destination="6Ul-Og-6v3" id="pj4-ur-dcn"/>
                         <outlet property="btnFavorite" destination="bV9-xk-3su" id="EfI-i8-IAg"/>
                         <outlet property="imgPoster" destination="BM9-B6-uJO" id="1Rd-Q3-Z2d"/>
                         <outlet property="topBar" destination="5ka-mK-noI" id="hGi-O9-H7H"/>
