@@ -38,7 +38,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let destionationViewController = segue.destinationViewController as! MovieDetailsViewController
-        destionationViewController.movie = selectedMovie
+        if segue.identifier == "movieDetailsSegue" {
+            let destionationViewController = segue.destinationViewController as! MovieDetailsViewController
+            destionationViewController.movie = selectedMovie
+        }
     }
 }

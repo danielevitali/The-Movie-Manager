@@ -15,6 +15,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var tfUsername: UITextField!
     @IBOutlet weak var tfPassword: UITextField!
     @IBOutlet weak var btnLogin: UIButton!
+    @IBOutlet weak var btnClose: UIBarButtonItem!
     
     var username: String?
     var password: String?
@@ -62,6 +63,7 @@ class LoginViewController: UIViewController {
             tfUsername.enabled = false
             tfPassword.enabled = false
             btnLogin.enabled = false
+            self.btnClose.enabled = false
             activityIndicator.startAnimating()
             requestToken()
         }
@@ -171,6 +173,7 @@ class LoginViewController: UIViewController {
                 self.btnLogin.enabled = true
                 self.tfUsername.enabled = true
                 self.tfPassword.enabled = true
+                self.btnClose.enabled = true
             }))
             alert.addAction(UIAlertAction(title: "Retry", style: UIAlertActionStyle.Default, handler: { action in
                 self.requestToken()

@@ -19,5 +19,4 @@ class Movie {
         self.title = response.title
         self.imageName = response.posterPath
     }
-    
 }

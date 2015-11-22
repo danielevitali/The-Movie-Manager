@@ -24,7 +24,7 @@ class MovieDetailsViewController: UIViewController {
         let favoriteMovies = User.getInstance().favoriteMovies
         if favoriteMovies == nil {
             topBar.rightBarButtonItems?.removeAll()
-        } else if favoriteMovies!.contains(movie) {
+        } else if favoriteMovies!.contains({$0.id == self.movie.id}) {
             btnFavorite.image = UIImage(named: "ic_favorite")
             isFavorite = true
         } else {
@@ -53,22 +53,23 @@ class MovieDetailsViewController: UIViewController {
         session.dataTaskWithRequest(request!, completionHandler: { data, response, error in
             
             guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
+                print(try! NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as! NSDictionary)
                 self.showFavoriteError()
                 return
             }
             
-            if let data = data where error == nil {
+            if error == nil {
                 dispatch_async(dispatch_get_main_queue(), {
-                    var favoriteMovies = User.getInstance().favoriteMovies!
                     if self.isFavorite == true {
-                        favoriteMovies.removeAtIndex(favoriteMovies.indexOf(movie))
+                        User.getInstance().favoriteMovies!.removeAtIndex(User.getInstance().favoriteMovies!.indexOf({$0.id == self.movie.id})!)
                         self.btnFavorite.image = UIImage(named: "ic_favorite_border")
                     } else {
-                        favoriteMovies.insert(self.movie, atIndex: 0)
+                        User.getInstance().favoriteMovies!.insert(self.movie, atIndex: 0)
                         self.btnFavorite.image = UIImage(named: "ic_favorite")
                     }
                     self.isFavorite = !self.isFavorite
                 })
+                return
             }
             self.showFavoriteError()
 

@@ -142,8 +142,12 @@ class Network {
             addRemoveFavoriteMoviePath.replaceRange(ADD_REMOVE_FAVORITE_MOVIE_PATH.rangeOfString("{id}")!, with: String(accountId))
             let url = NSURL(string: (BASE_URL + addRemoveFavoriteMoviePath + escapedParameters(params)))!
             let request = NSMutableURLRequest(URL: url)
+            request.HTTPMethod = "POST"
             request.addValue("application/json", forHTTPHeaderField: "Accept")
-            //TODO add json and POST
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            let requestBody = FavoriteMovieRequest(movieId: movieId, favorite: favorite)
+            request.HTTPBody = requestBody.getJsonString().dataUsingEncoding(NSUTF8StringEncoding)
+            print(requestBody.getJsonString())
             return request
         }
         return nil
