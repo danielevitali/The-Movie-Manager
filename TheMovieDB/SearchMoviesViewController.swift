@@ -9,38 +9,50 @@
 import Foundation
 import UIKit
 
-class SearchMoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
+class SearchMoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, SearchMoviesContractView {
     
     @IBOutlet weak var tblMovies: UITableView!
     @IBOutlet weak var tfSearch: UITextField!
     @IBOutlet weak var activityProgress: UIActivityIndicatorView!
-    
+
+    private var presenter: SearchMoviesContractPresenter!
     private var movies: [Movie]?
     private var selectedMovie: Movie?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        presenter = SearchMoviesPresenter(view: self)
         tfSearch.delegate = self
     }
     
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        presenter = nil
+    }
+    
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        self.activityProgress.hidden = false
-        NetworkManager.getInstance().searchMovies(string, completionHandler: {response, error in
-            if let response = response {
-                var movies = [Movie]()
-                for movieResponse in response.movies {
-                    movies.append(Movie(response: movieResponse))
-                }
-                self.movies = movies
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.activityProgress.hidden = true
-                    self.tblMovies.reloadData()
-                })
-            } else {
-                
-            }
-        })
+        presenter.search(string)
         return true
+    }
+    
+    func showMovies(movies: [Movie]) {
+        self.movies = movies
+        tblMovies.reloadData()
+    }
+    
+    func toggleActivityIndicator(visible: Bool) {
+        activityProgress.hidden = !visible
+    }
+    
+    func showErrorAlert() {
+        if presentedViewController != nil {
+            let alert = UIAlertController(title: "Error", message: "Error retreiving the list of movies", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Retry", style: .Default, handler: { action in
+                self.presenter.search(self.tfSearch.text!)
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -61,7 +73,7 @@ class SearchMoviesViewController: UIViewController, UITableViewDataSource, UITab
         showMovieDetails(movies![indexPath.row])
     }
     
-    private func showMovieDetails(movie: Movie) {
+    func showMovieDetails(movie: Movie) {
         selectedMovie = movie
         performSegueWithIdentifier("movieDetailsSegue", sender: self)
     }

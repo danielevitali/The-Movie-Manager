@@ -9,9 +9,8 @@
 import Foundation
 import UIKit
 
-class MovieDetailsViewController: UIViewController {
+class MovieDetailsViewController: UIViewController, MovieDetailsContractView {
     
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var imgPoster: UIImageView!
     @IBOutlet weak var btnFavorite: UIBarButtonItem!
     @IBOutlet weak var topBar: UINavigationItem!
@@ -40,7 +39,9 @@ class MovieDetailsViewController: UIViewController {
     }
     
     @IBAction func favoriteClick(sender: AnyObject) {
-        addRemoveFavorite(!isFavorite)
+        if User.getInstance().isLoggedIn() {
+        NetworkManager.getInstance().postFavoriteMovies(<#T##sessionId: String##String#>, accountId: <#T##Int#>, requestBody: <#T##FavoriteMovieRequest#>, completionHandler: <#T##(error: NSError?) -> Void#>)
+        }
     }
     
     private func addRemoveFavorite(favorite: Bool) {
