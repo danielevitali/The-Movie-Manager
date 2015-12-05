@@ -1,4 +1,4 @@
-# The-Movie-Manager
+# The Movie Manager
 
 Based on TheMovieDB, this iOS app lets you find movies and add them to your favorites and watchlist. 
 
