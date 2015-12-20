@@ -39,6 +39,14 @@ class NetworkManager: NSObject {
         sharedSession = NSURLSession.sharedSession()
     }
     
+    func getUrlForImage(imageName: String, size: String) -> NSURL {
+        var path = NetworkManager.BASE_IMAGE_URL
+        path.replaceRange(path.rangeOfString("{name}")!, with: imageName)
+        path.replaceRange(path.rangeOfString("{size}")!, with: size)
+        return NSURL(string: path)!
+    }
+
+    
     func getNewToken(completionHandler: (newTokenResponse: NewTokenResponse?, error: NSError?) -> Void) {
         let url = buildUrl(NetworkManager.NEW_TOKEN_PATH, params: nil)
         executeGetRequest(url, completionHandler: { data, error in

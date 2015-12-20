@@ -13,11 +13,11 @@ class SearchMoviesViewController: UIViewController, UITableViewDataSource, UITab
     
     @IBOutlet weak var tblMovies: UITableView!
     @IBOutlet weak var tfSearch: UITextField!
-    @IBOutlet weak var activityProgress: UIActivityIndicatorView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
 
     private var presenter: SearchMoviesContractPresenter!
     private var movies: [Movie]?
-    private var selectedMovie: Movie?
+    private var movieForSegue: Movie?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,8 +40,12 @@ class SearchMoviesViewController: UIViewController, UITableViewDataSource, UITab
         tblMovies.reloadData()
     }
     
-    func toggleActivityIndicator(visible: Bool) {
-        activityProgress.hidden = !visible
+    func toggleActivityIndicator(animate: Bool) {
+        if animate {
+            activityIndicator.startAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
     }
     
     func showErrorAlert() {
@@ -63,25 +67,29 @@ class SearchMoviesViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell =  tableView.dequeueReusableCellWithIdentifier("searchMovieCell")! as! MovieCell
+        let cell =  tableView.dequeueReusableCellWithIdentifier("searchMovieCell")! as! SearchMovieCell
         let movie = movies![indexPath.row]
         cell.setMovie(movie)
         return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        showMovieDetails(movies![indexPath.row])
+        presenter.movieClick(movies![indexPath.row])
     }
     
     func showMovieDetails(movie: Movie) {
-        selectedMovie = movie
+        movieForSegue = movie
         performSegueWithIdentifier("movieDetailsSegue", sender: self)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "movieDetailsSegue" {
+        switch segue.identifier! {
+        case "movieDetailsSegue":
             let destionationViewController = segue.destinationViewController as! MovieDetailsViewController
-            destionationViewController.movie = selectedMovie
+            destionationViewController.movie = movieForSegue
+            break;
+        default:
+            break
         }
     }
 }

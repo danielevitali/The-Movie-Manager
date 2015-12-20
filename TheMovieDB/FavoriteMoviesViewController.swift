@@ -1,21 +1,21 @@
 //
-//  GenresViewController.swift
+//  FavoriteViewController.swift
 //  TheMovieDB
 //
-//  Created by Daniele Vitali on 11/22/15.
+//  Created by Daniele Vitali on 11/21/15.
 //  Copyright © 2015 Daniele Vitali. All rights reserved.
 //
 
 import Foundation
 import UIKit
 
-class WatchlistViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UserMovieListContractView {
+class FavoriteMoviesViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UserMovieListContractView {
     
-    @IBOutlet weak var tblMovies: UITableView!
     @IBOutlet weak var btnLogin: UIButton!
+    @IBOutlet weak var cvFavorites: UICollectionView!
     
     private var presenter: UserMovieListContractPresenter!
-    private var watchlist: [Movie]?
+    private var favoriteMovies: [Movie]?
     private var movieForSegue: Movie?
     
     override func viewDidLoad() {
@@ -28,30 +28,25 @@ class WatchlistViewController: UIViewController, UITableViewDataSource, UITableV
         
         let account = Account.getInstance()
         if account.isUserLoggedIn() {
-            watchlist = Account.getInstance().watchlist
+            favoriteMovies = Account.getInstance().favoriteMovies
             btnLogin.hidden = true
         } else {
             btnLogin.hidden = false
         }
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let watchlist = watchlist {
-            return watchlist.count
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if let favoriteMovies = favoriteMovies {
+            return favoriteMovies.count
         }
         return 0
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell =  tableView.dequeueReusableCellWithIdentifier("watchlistMovieCell")! as! WatchlistMovieCell
-        let movie = watchlist![indexPath.row]
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell =  collectionView.dequeueReusableCellWithReuseIdentifier("favoriteMovieCell", forIndexPath: indexPath) as! FavoriteMovieCell
+        let movie = favoriteMovies![indexPath.row]
         cell.setMovie(movie)
         return cell
-    }
-    
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let movie = watchlist![indexPath.row]
-        presenter.movieClick(movie)
     }
     
     @IBAction func loginClick(sender: AnyObject) {
@@ -77,4 +72,5 @@ class WatchlistViewController: UIViewController, UITableViewDataSource, UITableV
             break;
         }
     }
+    
 }

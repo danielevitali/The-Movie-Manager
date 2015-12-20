@@ -13,87 +13,138 @@ class MovieDetailsViewController: UIViewController, MovieDetailsContractView {
     
     @IBOutlet weak var imgPoster: UIImageView!
     @IBOutlet weak var btnFavorite: UIBarButtonItem!
-    @IBOutlet weak var topBar: UINavigationItem!
+    @IBOutlet weak var btnWatchlist: UIBarButtonItem!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var movie: Movie!
-    var isFavorite: Bool!
+    
+    private var presenter: MovieDetailsContractPresenter!
+    private var favorite: Bool!
+    private var inWatchlist: Bool!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let favoriteMovies = User.getInstance().favoriteMovies
-        if favoriteMovies == nil {
-            topBar.rightBarButtonItems?.removeAll()
-        } else if favoriteMovies!.contains({$0.id == self.movie.id}) {
+        presenter = MovieDetailsPresenter(view: self)
+        
+        favorite = presenter.isFavoriteMovie(movie)
+        if favorite! {
             btnFavorite.image = UIImage(named: "ic_favorite")
-            isFavorite = true
         } else {
             btnFavorite.image = UIImage(named: "ic_favorite_border")
-            isFavorite = false
+        }
+        
+        inWatchlist = presenter.isInWatchlistMovie(movie)
+        if inWatchlist! {
+            btnWatchlist.image = UIImage(named: "ic_watchlist")
+        } else {
+            btnWatchlist.image = UIImage(named: "ic_watchlist_border")
         }
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        imgPoster.image = UIImage(data: NSData(contentsOfURL: Network.getUrlForImage(movie.imageName, size: "original"))!)
+        let posterUrl = presenter.getPosterUrl(movie)
+        imgPoster.image = UIImage(data: NSData(contentsOfURL: posterUrl)!)
         navigationItem.title = movie.title
     }
     
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        presenter = nil
+    }
+    
     @IBAction func favoriteClick(sender: AnyObject) {
-        if User.getInstance().isLoggedIn() {
-        NetworkManager.getInstance().postFavoriteMovies(<#T##sessionId: String##String#>, accountId: <#T##Int#>, requestBody: <#T##FavoriteMovieRequest#>, completionHandler: <#T##(error: NSError?) -> Void#>)
+        if favorite! {
+            presenter.removeFromFavoriteClick(movie)
+        } else {
+            presenter.addToFavoriteClick(movie)
         }
     }
     
-    private func addRemoveFavorite(favorite: Bool) {
-        activityIndicator.startAnimating()
-        self.topBar.leftBarButtonItem?.enabled = false
-        self.btnFavorite.enabled = false
-        
-        let request = Network.getRequestForAddRemoveFavoriteMovie(User.getInstance().accountId!, movieId: movie.id, favorite: favorite)
-        let session = NSURLSession.sharedSession()
-        session.dataTaskWithRequest(request!, completionHandler: { data, response, error in
-            
-            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
-                print(try! NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as! NSDictionary)
-                self.showFavoriteError()
-                return
-            }
-            
-            if error == nil {
-                dispatch_async(dispatch_get_main_queue(), {
-                    if self.isFavorite == true {
-                        User.getInstance().favoriteMovies!.removeAtIndex(User.getInstance().favoriteMovies!.indexOf({$0.id == self.movie.id})!)
-                        self.btnFavorite.image = UIImage(named: "ic_favorite_border")
-                    } else {
-                        User.getInstance().favoriteMovies!.insert(self.movie, atIndex: 0)
-                        self.btnFavorite.image = UIImage(named: "ic_favorite")
-                    }
-                    self.isFavorite = !self.isFavorite
-                    self.topBar.leftBarButtonItem?.enabled = true
-                    self.btnFavorite.enabled = true
-                    self.activityIndicator.stopAnimating()
-                })
-                return
-            }
-            self.showFavoriteError()
-
-        }).resume()
+    @IBAction func watchlistClick(sender: AnyObject) {
+        if favorite! {
+            presenter.removeFromFavoriteClick(movie)
+        } else {
+            presenter.addToFavoriteClick(movie)
+        }
     }
     
-    private func showFavoriteError() {
-        dispatch_async(dispatch_get_main_queue(), {
-            
-            self.activityIndicator.stopAnimating()
-            
-            let alert = UIAlertController(title: "Error", message: "Cannot complete your request", preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.Default, handler: { action in
-                self.topBar.leftBarButtonItem?.enabled = true
-                self.btnFavorite.enabled = true
-            }))
-            alert.addAction(UIAlertAction(title: "Retry", style: UIAlertActionStyle.Default, handler: { action in
-                self.addRemoveFavorite(!self.isFavorite)
-            }))
-            self.presentViewController(alert, animated: true, completion: nil)
-        })
+    func toggleActivityIndicator(animate: Bool) {
+        if animate {
+            activityIndicator.startAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
+
+    }
+    
+    func showLogin() {
+        performSegueWithIdentifier("loginSegue", sender: self)
+    }
+    
+    func movieAddedToFavorites() {
+        favorite = true
+        btnFavorite.image = UIImage(named: "ic_favorite")
+    }
+    
+    func movieRemovedFromFavorites() {
+        favorite = false
+        btnFavorite.image = UIImage(named: "ic_favorite_border")
+    }
+    
+    func movieAddedToWatchlist() {
+        inWatchlist = true
+        btnWatchlist.image = UIImage(named: "ic_watchlist")
+    }
+    
+    func movieRemovedFromWatchlist() {
+        inWatchlist = false
+        btnWatchlist.image = UIImage(named: "ic_watchlist_border")
+    }
+    
+    func disableWatchlistAndFavoriteButton() {
+        btnWatchlist.enabled = false
+        btnFavorite.enabled = false
+    }
+    
+    func enableWatchlistAndFavoriteButton() {
+        btnWatchlist.enabled = true
+        btnFavorite.enabled = true
+    }
+    
+    func showErrorAddingToFavorites() {
+        let alert = UIAlertController(title: "Error", message: "Cannot add movie to your favorite", preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.Default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Retry", style: UIAlertActionStyle.Default, handler: { action in
+            self.presenter.addToFavoriteClick(self.movie)
+        }))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func showErrorRemovingFromFavorites() {
+        let alert = UIAlertController(title: "Error", message: "Cannot remove movie from your favorite", preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.Default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Retry", style: UIAlertActionStyle.Default, handler: { action in
+            self.presenter.removeFromFavoriteClick(self.movie)
+        }))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func showErrorAddingToWatchlist() {
+        let alert = UIAlertController(title: "Error", message: "Cannot add movie to your watchlist", preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.Default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Retry", style: UIAlertActionStyle.Default, handler: { action in
+            self.presenter.addToWatchlistClick(self.movie)
+        }))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func showErroRemovingFromWatchlist() {
+        let alert = UIAlertController(title: "Error", message: "Cannot remove movie from your watchlist", preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.Default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Retry", style: UIAlertActionStyle.Default, handler: { action in
+            self.presenter.removeFromWatchlistClick(self.movie)
+        }))
+        self.presentViewController(alert, animated: true, completion: nil)
     }
 }

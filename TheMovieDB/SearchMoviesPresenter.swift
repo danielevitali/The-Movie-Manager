@@ -10,8 +10,8 @@ import Foundation
 
 class SearchMoviesPresenter: SearchMoviesContractPresenter{
     
-    let view: SearchMoviesContractView
-    let networkManager: NetworkManager
+    private let view: SearchMoviesContractView
+    private let networkManager: NetworkManager
     
     init(view: SearchMoviesContractView) {
         self.view = view
@@ -24,7 +24,7 @@ class SearchMoviesPresenter: SearchMoviesContractPresenter{
             return
         }
         
-        self.view.toggleActivityIndicator(true)
+        view.toggleActivityIndicator(true)
         networkManager.searchMovies(query, completionHandler: {response, error in
             if let response = response {
                 var movies = [Movie]()
@@ -46,5 +46,6 @@ class SearchMoviesPresenter: SearchMoviesContractPresenter{
     func movieClick(movie: Movie) {
         view.showMovieDetails(movie)
     }
+    
     
 }

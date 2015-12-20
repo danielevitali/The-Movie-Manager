@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, LoginContractView {
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var tfUsername: UITextField!
@@ -17,6 +17,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var btnLogin: UIButton!
     @IBOutlet weak var btnClose: UIBarButtonItem!
     
+    private var presenter: LoginContractPresenter!
     var username: String?
     var password: String?
     var userToken: String?
@@ -24,6 +25,8 @@ class LoginViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        presenter = LoginPresenter(view: self)
+        
         tapRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         tapRecognizer.numberOfTapsRequired = 1
         view.addGestureRecognizer(tapRecognizer)
@@ -31,7 +34,17 @@ class LoginViewController: UIViewController {
     
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
+        presenter = nil
+        
         view.removeGestureRecognizer(tapRecognizer)
+    }
+    
+    func toggleActivityIndicator(animate: Bool) {
+        if animate {
+            activityIndicator.startAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
     }
     
     func dismissKeyboard() {
@@ -39,34 +52,53 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func closeClick(sender: AnyObject) {
-        dismissViewControllerAnimated(true, completion: nil)
+        presenter.closeClick()
     }
     
     @IBAction func loginClick(sender: AnyObject) {
-        username = tfUsername.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        if let email = username where email != "" {
-            tfUsername.rightView = nil
-        } else {
-            showWarning(tfUsername)
-            username = nil
-        }
+        presenter.loginClick(tfUsername.text!, password: tfPassword.text!)
+    }
+    
+    func dismissViewController() {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func showWarningForInvalidUsername() {
+        showWarning(tfUsername)
+    }
+    
+    func showWarningForInvalidPassword() {
+        showWarning(tfPassword)
+    }
+    
+    func dismissWarningsForValidation() {
+        tfUsername.rightView = nil
+        tfPassword.rightView = nil
+    }
+    
+    func showErrorDuringLogin() {
+        self.activityIndicator.stopAnimating()
         
-        password = tfPassword.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        if let password = password where password != "" {
-            tfPassword.rightView = nil
-        } else {
-            showWarning(tfPassword)
-            password = nil
-        }
-        
-        if username != nil && password != nil {
-            tfUsername.enabled = false
-            tfPassword.enabled = false
-            btnLogin.enabled = false
-            self.btnClose.enabled = false
-            activityIndicator.startAnimating()
-            requestToken()
-        }
+        let alert = UIAlertController(title: "Error", message: "Login failed", preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.Default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Retry", style: UIAlertActionStyle.Default, handler: { action in
+            self.presenter.loginClick(self.tfUsername.text!, password: self.tfPassword.text!)
+        }))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func disableUI() {
+        btnLogin.enabled = false
+        tfUsername.enabled = false
+        tfPassword.enabled = false
+        btnClose.enabled = false
+    }
+    
+    func enableUI() {
+        btnLogin.enabled = true
+        tfUsername.enabled = true
+        tfPassword.enabled = true
+        btnClose.enabled = true
     }
     
     private func showWarning(textField: UITextField) {
@@ -75,110 +107,5 @@ class LoginViewController: UIViewController {
         imageSize = ivWarning.sizeThatFits(imageSize)
         ivWarning.frame = CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height)
         textField.rightView = ivWarning
-    }
-    
-    private func requestToken() {
-        let request = Network.getRequestForNewToken()
-        let session = NSURLSession.sharedSession()
-        session.dataTaskWithRequest(request, completionHandler: { data, response, error in
-            
-            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
-                self.showLoginError()
-                return
-            }
-            
-            if let data = data where error == nil {
-                let newTokenResponse = Network.parseNewTokenResponse(data)
-                if newTokenResponse.success {
-                    self.userToken = newTokenResponse.requestToken
-                    self.login()
-                    return
-                }
-            }
-            self.showLoginError()
-        }).resume()
-    }
-    
-    private func login() {
-        let request = Network.getRequestForLogin(userToken!, username: username!, password: password!)
-        let session = NSURLSession.sharedSession()
-        session.dataTaskWithRequest(request, completionHandler: { data, response, error in
-            
-            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
-                self.showLoginError()
-                return
-            }
-            
-            if let data = data where error == nil {
-                let loginResponse = Network.parseLoginResponse(data)
-                if loginResponse.success {
-                    self.newSession()
-                    return
-                }
-            }
-            self.showLoginError()
-        }).resume()
-    }
-    
-    private func newSession() {
-        let request = Network.getRequestForNewSession(userToken!)
-        let session = NSURLSession.sharedSession()
-        session.dataTaskWithRequest(request, completionHandler: { data, response, error in
-            
-            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
-                self.showLoginError()
-                return
-            }
-            
-            if let data = data where error == nil {
-                let newSessionResponse = Network.parseNewSessionResponse(data)
-                if newSessionResponse.success {
-                    Network.sessionId = newSessionResponse.sessionId
-                    self.getUserInfo()
-                    return
-                }
-            }
-            self.showLoginError()
-        }).resume()
-    }
-    
-    private func getUserInfo() {
-        let request = Network.getRequestForAccountInfo()
-        let session = NSURLSession.sharedSession()
-        session.dataTaskWithRequest(request!, completionHandler: { data, response, error in
-            
-            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
-                self.showLoginError()
-                return
-            }
-            
-            if let data = data where error == nil {
-                let accountInfoResponse = Network.parseAccountInfoResponse(data)
-                User.getInstance().setUserInfo(accountInfoResponse)
-                self.activityIndicator.stopAnimating()
-                self.dismissViewControllerAnimated(true, completion: nil)
-                return
-            }
-            self.showLoginError()
-        }).resume()
-    }
-    
-    private func showLoginError() {
-        dispatch_async(dispatch_get_main_queue(), {
-            
-            self.activityIndicator.stopAnimating()
-            
-            let alert = UIAlertController(title: "Error", message: "Login failed", preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.Default, handler: { action in
-                self.btnLogin.enabled = true
-                self.tfUsername.enabled = true
-                self.tfPassword.enabled = true
-                self.btnClose.enabled = true
-            }))
-            alert.addAction(UIAlertAction(title: "Retry", style: UIAlertActionStyle.Default, handler: { action in
-                self.requestToken()
-            }))
-            self.presentViewController(alert, animated: true, completion: nil)
-        })
     }
 }

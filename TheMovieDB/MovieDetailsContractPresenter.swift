@@ -10,6 +10,14 @@ import Foundation
 
 protocol MovieDetailsContractPresenter {
     
+    init(view: MovieDetailsContractView)
+    
+    func getPosterUrl(movie: Movie) -> NSURL
+    
+    func isFavoriteMovie(movie: Movie) -> Bool
+    
+    func isInWatchlistMovie(movie: Movie) -> Bool
+    
     func addToFavoriteClick(movie: Movie)
 
     func removeFromFavoriteClick(movie: Movie)

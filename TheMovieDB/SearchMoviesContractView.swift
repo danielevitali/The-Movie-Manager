@@ -10,7 +10,7 @@ import Foundation
 
 protocol SearchMoviesContractView {
     
-    func toggleActivityIndicator(visible: Bool)
+    func toggleActivityIndicator(animate: Bool)
     
     func showMovies(movies: [Movie])
     

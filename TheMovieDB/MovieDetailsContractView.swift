@@ -10,4 +10,28 @@ import Foundation
 
 protocol MovieDetailsContractView {
     
+    func toggleActivityIndicator(animate: Bool)
+    
+    func showLogin()
+    
+    func movieAddedToFavorites()
+    
+    func movieRemovedFromFavorites()
+    
+    func movieAddedToWatchlist()
+    
+    func movieRemovedFromWatchlist()
+    
+    func disableWatchlistAndFavoriteButton()
+    
+    func enableWatchlistAndFavoriteButton()
+    
+    func showErrorAddingToFavorites()
+    
+    func showErrorRemovingFromFavorites()
+    
+    func showErrorAddingToWatchlist()
+    
+    func showErroRemovingFromWatchlist()
+    
 }

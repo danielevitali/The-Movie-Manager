@@ -12,6 +12,5 @@ protocol SearchMoviesContractPresenter {
     
     func search(query: String)
     
-    func movieClick(movie: Movie)
-    
+    func movieClick(movie: Movie)    
 }
