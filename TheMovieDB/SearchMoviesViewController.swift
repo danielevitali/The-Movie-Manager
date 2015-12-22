@@ -14,6 +14,7 @@ class SearchMoviesViewController: UIViewController, UITableViewDataSource, UITab
     @IBOutlet weak var tblMovies: UITableView!
     @IBOutlet weak var tfSearch: UITextField!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var lblEmptyList: UILabel!
 
     private var presenter: SearchMoviesContractPresenter!
     private var movies: [Movie]?
@@ -25,19 +26,44 @@ class SearchMoviesViewController: UIViewController, UITableViewDataSource, UITab
         tfSearch.delegate = self
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        tblMovies.reloadData()
+    }
+    
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
         presenter = nil
     }
     
+    func showNoMovieFound() {
+        tblMovies.hidden = true
+        lblEmptyList.hidden = false
+        lblEmptyList.text = "No movie with this title found"
+    }
+    
+    func showInitialLabel() {
+        tblMovies.hidden = true
+        lblEmptyList.hidden = false
+        lblEmptyList.text = "Start typing the title of a movie"
+    }
+    
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        presenter.search((textField.text! as NSString).stringByReplacingCharactersInRange(range, withString: string))
+        let text: NSString
+        if let textFieldText = textField.text {
+            text = textFieldText
+        } else {
+            text = ""
+        }
+        presenter.search(text.stringByReplacingCharactersInRange(range, withString: string))
         return true
     }
     
     func showMovies(movies: [Movie]) {
         self.movies = movies
         tblMovies.reloadData()
+        tblMovies.hidden = false
+        lblEmptyList.hidden = true
     }
     
     func toggleActivityIndicator(animate: Bool) {

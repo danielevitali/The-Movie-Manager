@@ -16,6 +16,7 @@ class SearchMoviesPresenter: SearchMoviesContractPresenter{
     init(view: SearchMoviesContractView) {
         self.view = view
         self.networkManager = NetworkManager.getInstance()
+        self.view.showInitialLabel()
     }
     
     func search(query: String) {
@@ -33,7 +34,11 @@ class SearchMoviesPresenter: SearchMoviesContractPresenter{
                 }
                 dispatch_async(dispatch_get_main_queue(), {
                     self.view.toggleActivityIndicator(false)
-                    self.view.showMovies(movies)
+                    if movies.count == 0 {
+                        self.view.showNoMovieFound()
+                    } else {
+                        self.view.showMovies(movies)
+                    }
                 })
             } else {
                 dispatch_async(dispatch_get_main_queue(), {

@@ -13,6 +13,7 @@ class WatchlistViewController: UIViewController, UITableViewDataSource, UITableV
     
     @IBOutlet weak var tblMovies: UITableView!
     @IBOutlet weak var btnLogin: UIButton!
+    @IBOutlet weak var lblNoMovies: UILabel!
     
     private var presenter: UserMovieListContractPresenter!
     private var watchlist: [Movie]?
@@ -20,19 +21,32 @@ class WatchlistViewController: UIViewController, UITableViewDataSource, UITableV
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter = UserMovieListPresenter(view: self)
+        presenter = WatchlistPresenter(view: self)
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-        let account = Account.getInstance()
-        if account.isUserLoggedIn() {
-            watchlist = Account.getInstance().watchlist
-            btnLogin.hidden = true
-        } else {
-            btnLogin.hidden = false
-        }
+        presenter.viewWillAppear()
+    }
+    
+    func showNoMovieFound() {
+        lblNoMovies.hidden = false
+        btnLogin.hidden = true
+        tblMovies.hidden = true
+    }
+    
+    func showLoginButton() {
+        lblNoMovies.hidden = true
+        btnLogin.hidden = false
+        tblMovies.hidden = true
+    }
+    
+    func showMovies(movies: [Movie]) {
+        self.watchlist = movies
+        tblMovies.reloadData()
+        lblNoMovies.hidden = true
+        btnLogin.hidden = true
+        tblMovies.hidden = false
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

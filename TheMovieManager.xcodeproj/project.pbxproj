@@ -39,9 +39,10 @@
 		64D6EF081C26FF1100CE3127 /* LoginPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D6EF071C26FF1100CE3127 /* LoginPresenter.swift */; };
 		64D6EF0C1C270BD700CE3127 /* UserMovieListContractView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D6EF0B1C270BD700CE3127 /* UserMovieListContractView.swift */; };
 		64D6EF0E1C270BE300CE3127 /* UserMovieListContractPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D6EF0D1C270BE300CE3127 /* UserMovieListContractPresenter.swift */; };
-		64D6EF101C270C9C00CE3127 /* UserMovieListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D6EF0F1C270C9C00CE3127 /* UserMovieListPresenter.swift */; };
+		64D6EF101C270C9C00CE3127 /* FavoriteMoviesPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D6EF0F1C270C9C00CE3127 /* FavoriteMoviesPresenter.swift */; };
 		64D6EF121C2711C300CE3127 /* WatchlistMovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D6EF111C2711C300CE3127 /* WatchlistMovieCell.swift */; };
 		64D6EF171C27160900CE3127 /* FavoriteMovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D6EF161C27160900CE3127 /* FavoriteMovieCell.swift */; };
+		64D6EF191C29678100CE3127 /* WatchlistPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D6EF181C29678100CE3127 /* WatchlistPresenter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,9 +99,10 @@
 		64D6EF071C26FF1100CE3127 /* LoginPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginPresenter.swift; sourceTree = "<group>"; };
 		64D6EF0B1C270BD700CE3127 /* UserMovieListContractView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserMovieListContractView.swift; sourceTree = "<group>"; };
 		64D6EF0D1C270BE300CE3127 /* UserMovieListContractPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserMovieListContractPresenter.swift; sourceTree = "<group>"; };
-		64D6EF0F1C270C9C00CE3127 /* UserMovieListPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserMovieListPresenter.swift; sourceTree = "<group>"; };
+		64D6EF0F1C270C9C00CE3127 /* FavoriteMoviesPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteMoviesPresenter.swift; sourceTree = "<group>"; };
 		64D6EF111C2711C300CE3127 /* WatchlistMovieCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchlistMovieCell.swift; sourceTree = "<group>"; };
 		64D6EF161C27160900CE3127 /* FavoriteMovieCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteMovieCell.swift; sourceTree = "<group>"; };
+		64D6EF181C29678100CE3127 /* WatchlistPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchlistPresenter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +157,7 @@
 			children = (
 				64884A811C02009600C69FE3 /* WatchlistViewController.swift */,
 				64D6EF111C2711C300CE3127 /* WatchlistMovieCell.swift */,
+				64D6EF181C29678100CE3127 /* WatchlistPresenter.swift */,
 			);
 			name = Watchlist;
 			sourceTree = "<group>";
@@ -162,6 +165,7 @@
 		644570741C1322D600731985 /* Favorites */ = {
 			isa = PBXGroup;
 			children = (
+				64D6EF0F1C270C9C00CE3127 /* FavoriteMoviesPresenter.swift */,
 				64CEC3651C00AD6400A27B92 /* FavoriteMoviesViewController.swift */,
 				64D6EF161C27160900CE3127 /* FavoriteMovieCell.swift */,
 			);
@@ -312,7 +316,6 @@
 		64D6EF151C2714C100CE3127 /* Commons */ = {
 			isa = PBXGroup;
 			children = (
-				64D6EF0F1C270C9C00CE3127 /* UserMovieListPresenter.swift */,
 				64D6EF091C270B4C00CE3127 /* Contract */,
 			);
 			name = Commons;
@@ -458,7 +461,7 @@
 				64CEC37E1C00FADE00A27B92 /* SearchMovieCell.swift in Sources */,
 				6445707E1C13499800731985 /* SearchMoviesContractView.swift in Sources */,
 				644570841C1350B200731985 /* MovieDetailsContractView.swift in Sources */,
-				64D6EF101C270C9C00CE3127 /* UserMovieListPresenter.swift in Sources */,
+				64D6EF101C270C9C00CE3127 /* FavoriteMoviesPresenter.swift in Sources */,
 				644570801C134A4900731985 /* SearchMoviesContractPresenter.swift in Sources */,
 				64884A8B1C025B8800C69FE3 /* MovieDetailsViewController.swift in Sources */,
 				64884A8E1C026AD400C69FE3 /* FavoriteMovieRequest.swift in Sources */,
@@ -473,6 +476,7 @@
 				64D6EF171C27160900CE3127 /* FavoriteMovieCell.swift in Sources */,
 				64CEC3771C00EB4E00A27B92 /* Movie.swift in Sources */,
 				64CEC3711C00E6B400A27B92 /* AccountInfoResponse.swift in Sources */,
+				64D6EF191C29678100CE3127 /* WatchlistPresenter.swift in Sources */,
 				64D6EF061C26FE1C00CE3127 /* LoginContractView.swift in Sources */,
 				644570781C133EFC00731985 /* WatchlistMovieRequest.swift in Sources */,
 				64CEC3731C00E7F200A27B92 /* Account.swift in Sources */,

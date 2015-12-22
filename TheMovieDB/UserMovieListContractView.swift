@@ -14,4 +14,9 @@ protocol UserMovieListContractView {
     
     func showLogin()
     
+    func showNoMovieFound()
+    
+    func showLoginButton()
+    
+    func showMovies(movies: [Movie])
 }

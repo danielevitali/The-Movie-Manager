@@ -17,4 +17,8 @@ protocol SearchMoviesContractView {
     func showMovieDetails(movie: Movie)
     
     func showErrorAlert()
+    
+    func showNoMovieFound()
+    
+    func showInitialLabel()
 }

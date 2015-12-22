@@ -12,6 +12,7 @@ import UIKit
 class FavoriteMoviesViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UserMovieListContractView {
     
     @IBOutlet weak var btnLogin: UIButton!
+    @IBOutlet weak var lblNoMovies: UILabel!
     @IBOutlet weak var cvFavorites: UICollectionView!
     
     private var presenter: UserMovieListContractPresenter!
@@ -20,19 +21,31 @@ class FavoriteMoviesViewController: UIViewController, UICollectionViewDataSource
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter = UserMovieListPresenter(view: self)
+        presenter = FavoriteMoviesPresenter(view: self)
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-        let account = Account.getInstance()
-        if account.isUserLoggedIn() {
-            favoriteMovies = Account.getInstance().favoriteMovies
-            btnLogin.hidden = true
-        } else {
-            btnLogin.hidden = false
-        }
+        presenter.viewWillAppear()
+    }
+    
+    func showNoMovieFound() {
+        cvFavorites.hidden = true
+        lblNoMovies.hidden = false
+        btnLogin.hidden = true
+    }
+    
+    func showLoginButton() {
+        cvFavorites.hidden = true
+        lblNoMovies.hidden = true
+        btnLogin.hidden = false
+    }
+    
+    func showMovies(movies: [Movie]) {
+        cvFavorites.hidden = false
+        cvFavorites.reloadData()
+        lblNoMovies.hidden = true
+        btnLogin.hidden = true
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

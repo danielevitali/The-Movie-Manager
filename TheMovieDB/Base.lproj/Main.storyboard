@@ -35,9 +35,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Watchlist is empty" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vz2-yf-FDu">
+                                <rect key="frame" x="230" y="290.5" width="140.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wEf-im-Tdo">
-                                <rect key="frame" x="281" y="285" width="38" height="30"/>
-                                <state key="normal" title="Login"/>
+                                <rect key="frame" x="196.5" y="285" width="207" height="30"/>
+                                <state key="normal" title="Login for create your watchlist"/>
                                 <connections>
                                     <action selector="loginClick:" destination="fOr-9c-Mo3" eventType="touchUpInside" id="MGi-Uo-ogT"/>
                                 </connections>
@@ -89,7 +95,9 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="vz2-yf-FDu" firstAttribute="centerY" secondItem="DI9-NY-pv7" secondAttribute="centerY" id="90V-a2-vHt"/>
                             <constraint firstItem="H9b-be-Vxs" firstAttribute="leading" secondItem="DI9-NY-pv7" secondAttribute="leading" id="Jvu-70-b7E"/>
+                            <constraint firstItem="vz2-yf-FDu" firstAttribute="centerX" secondItem="DI9-NY-pv7" secondAttribute="centerX" id="PuV-oW-3Hj"/>
                             <constraint firstItem="wEf-im-Tdo" firstAttribute="centerY" secondItem="DI9-NY-pv7" secondAttribute="centerY" id="UTh-AA-i9B"/>
                             <constraint firstItem="F6M-iw-GfO" firstAttribute="top" secondItem="H9b-be-Vxs" secondAttribute="bottom" id="XjB-bV-QgJ"/>
                             <constraint firstItem="H9b-be-Vxs" firstAttribute="top" secondItem="wgD-Lb-BTc" secondAttribute="bottom" id="e26-HB-J80"/>
@@ -100,6 +108,7 @@
                     <tabBarItem key="tabBarItem" title="Watchlist" image="ic_list" id="OwR-3Y-Ewf"/>
                     <connections>
                         <outlet property="btnLogin" destination="wEf-im-Tdo" id="pGN-4V-atz"/>
+                        <outlet property="lblNoMovies" destination="vz2-yf-FDu" id="Tdn-k5-CXX"/>
                         <outlet property="tblMovies" destination="H9b-be-Vxs" id="30Y-Hs-UXH"/>
                         <segue destination="TDU-rg-4jo" kind="push" identifier="movieDetailsSegue" id="rWA-C7-nV9"/>
                         <segue destination="b0B-g1-qnQ" kind="modal" identifier="loginSegue" id="MJv-Vy-yWt"/>
@@ -122,12 +131,18 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VE6-p2-y4N">
-                                <rect key="frame" x="281" y="285" width="38" height="30"/>
-                                <state key="normal" title="Login"/>
+                                <rect key="frame" x="186.5" y="285" width="227" height="30"/>
+                                <state key="normal" title="Login for list your favorite movies"/>
                                 <connections>
                                     <action selector="loginClick:" destination="KJk-x3-iVf" eventType="touchUpInside" id="hrM-j4-kbR"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="No favorite movies" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OHb-lL-6gN">
+                                <rect key="frame" x="279" y="290" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Dn4-41-CGP">
                                 <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="72y-lG-3No">
@@ -167,6 +182,7 @@
                     <connections>
                         <outlet property="btnLogin" destination="VE6-p2-y4N" id="bwg-5c-s9G"/>
                         <outlet property="cvFavorites" destination="Dn4-41-CGP" id="MOU-7O-r4x"/>
+                        <outlet property="lblNoMovies" destination="OHb-lL-6gN" id="C8p-C0-HNc"/>
                         <segue destination="b0B-g1-qnQ" kind="modal" identifier="loginSegue" id="8WM-C6-U1x"/>
                         <segue destination="TDU-rg-4jo" kind="push" identifier="movieDetailsSegue" id="VYv-kd-2Fy"/>
                     </connections>
@@ -187,9 +203,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="gA8-3e-cXS">
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="gA8-3e-cXS">
                                 <rect key="frame" x="290" y="290" width="20" height="20"/>
                             </activityIndicatorView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="Type the title of a movie" text="Type the title of a movie" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ITZ-s1-dnw">
+                                <rect key="frame" x="208.5" y="290" width="183" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="46" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="8Bv-Jv-mYG">
                                 <rect key="frame" x="0.0" y="110" width="600" height="441"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -233,7 +255,7 @@
                                     <outlet property="delegate" destination="Gh0-Mx-lGZ" id="EjC-hv-1iZ"/>
                                 </connections>
                             </tableView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search a movie" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="USk-6h-9V7">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search a movie" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="USk-6h-9V7">
                                 <rect key="frame" x="20" y="72" width="560" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -245,9 +267,11 @@
                             <constraint firstItem="USk-6h-9V7" firstAttribute="leading" secondItem="9g6-S0-4oK" secondAttribute="leadingMargin" id="Jrs-Gt-1ZA"/>
                             <constraint firstItem="8Bv-Jv-mYG" firstAttribute="leading" secondItem="9g6-S0-4oK" secondAttribute="leading" id="O0Y-hG-mkc"/>
                             <constraint firstItem="gA8-3e-cXS" firstAttribute="centerY" secondItem="9g6-S0-4oK" secondAttribute="centerY" id="RHO-hb-RkQ"/>
+                            <constraint firstItem="ITZ-s1-dnw" firstAttribute="centerX" secondItem="9g6-S0-4oK" secondAttribute="centerX" id="bCR-Nk-SBi"/>
                             <constraint firstItem="gA8-3e-cXS" firstAttribute="centerX" secondItem="9g6-S0-4oK" secondAttribute="centerX" id="gPf-Vh-BYh"/>
                             <constraint firstAttribute="trailing" secondItem="8Bv-Jv-mYG" secondAttribute="trailing" id="gk6-Vy-tNn"/>
                             <constraint firstAttribute="trailingMargin" secondItem="USk-6h-9V7" secondAttribute="trailing" id="ldV-R6-5Jq"/>
+                            <constraint firstItem="ITZ-s1-dnw" firstAttribute="centerY" secondItem="9g6-S0-4oK" secondAttribute="centerY" id="oDa-lr-jnq"/>
                             <constraint firstItem="hMm-dN-Vkh" firstAttribute="top" secondItem="8Bv-Jv-mYG" secondAttribute="bottom" id="tR7-ac-T86"/>
                             <constraint firstItem="8Bv-Jv-mYG" firstAttribute="top" secondItem="USk-6h-9V7" secondAttribute="bottom" constant="8" id="xVp-mv-Cpa"/>
                         </constraints>
@@ -255,7 +279,8 @@
                     <tabBarItem key="tabBarItem" title="Movies" image="ic_movies" id="URI-VD-QV7"/>
                     <connections>
                         <outlet property="activityIndicator" destination="gA8-3e-cXS" id="jFm-m7-1P9"/>
-                        <outlet property="tblMovies" destination="8Bv-Jv-mYG" id="ENG-Il-6S6"/>
+                        <outlet property="lblEmptyList" destination="ITZ-s1-dnw" id="1oG-vO-djD"/>
+                        <outlet property="tblMovies" destination="8Bv-Jv-mYG" id="BBc-Ad-LIU"/>
                         <outlet property="tfSearch" destination="USk-6h-9V7" id="RLE-QI-kbi"/>
                         <segue destination="TDU-rg-4jo" kind="push" identifier="movieDetailsSegue" id="acx-Cu-Uhx"/>
                     </connections>
@@ -296,12 +321,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Qwy-5K-T6f">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="danielevitali" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Qwy-5K-T6f">
                                 <rect key="frame" x="20" y="247" width="560" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jZ4-qe-ls8">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="q1w2e3r4t5y6" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jZ4-qe-ls8">
                                 <rect key="frame" x="20" y="285" width="560" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
@@ -433,7 +458,7 @@
         <image name="ic_movies" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="acx-Cu-Uhx"/>
-        <segue reference="OiM-Ai-lJE"/>
+        <segue reference="VYv-kd-2Fy"/>
+        <segue reference="8WM-C6-U1x"/>
     </inferredMetricsTieBreakers>
 </document>

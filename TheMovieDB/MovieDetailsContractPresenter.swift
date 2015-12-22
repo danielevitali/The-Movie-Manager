@@ -25,4 +25,5 @@ protocol MovieDetailsContractPresenter {
     func addToWatchlistClick(movie: Movie)
     
     func removeFromWatchlistClick(movie: Movie)
+    
 }

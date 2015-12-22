@@ -13,4 +13,6 @@ protocol UserMovieListContractPresenter {
     func movieClick(movie: Movie)
     
     func loginClick()
+    
+    func viewWillAppear()
 }
