@@ -15,9 +15,11 @@ class WatchlistMovieCell: UITableViewCell {
     @IBOutlet weak var lblTitle: UILabel!
     
     func setMovie(movie: Movie) {
-        let url = NetworkManager.getInstance().getUrlForImage(movie.imageName, size: "w300")
-        let posterImage = UIImage(data: NSData(contentsOfURL: url)!)
-        imgPoster.image = posterImage
+        if let imageName = movie.imageName {
+            let url = NetworkManager.getInstance().getUrlForImage(imageName, size: "w300")
+            let posterImage = UIImage(data: NSData(contentsOfURL: url)!)
+            imgPoster.image = posterImage
+        }
         lblTitle.text = movie.title
     }
     

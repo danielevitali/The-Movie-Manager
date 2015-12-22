@@ -43,8 +43,9 @@ class MovieDetailsViewController: UIViewController, MovieDetailsContractView {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        let posterUrl = presenter.getPosterUrl(movie)
-        imgPoster.image = UIImage(data: NSData(contentsOfURL: posterUrl)!)
+        if let posterUrl = presenter.getPosterUrl(movie) {
+            imgPoster.image = UIImage(data: NSData(contentsOfURL: posterUrl)!)
+        }
         navigationItem.title = movie.title
     }
     

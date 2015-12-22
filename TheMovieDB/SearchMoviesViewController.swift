@@ -31,7 +31,7 @@ class SearchMoviesViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        presenter.search(string)
+        presenter.search((textField.text! as NSString).stringByReplacingCharactersInRange(range, withString: string))
         return true
     }
     

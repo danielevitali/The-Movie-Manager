@@ -12,7 +12,7 @@ class Movie {
     
     let id: Int
     let title: String
-    let imageName: String
+    let imageName: String?
     
     init(response: MovieResponse) {
         self.id = response.id

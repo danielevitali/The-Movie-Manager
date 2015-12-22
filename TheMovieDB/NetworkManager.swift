@@ -111,7 +111,10 @@ class NetworkManager: NSObject {
     }
     
     func searchMovies(query: String, completionHandler: (moviesResponse: MoviesResponse?, error: NSError?) -> Void) {
-        let url = buildUrl(NetworkManager.SEARCH_MOVIE_PATH, params: nil)
+        let params = [
+            "query" : query
+        ]
+        let url = buildUrl(NetworkManager.SEARCH_MOVIE_PATH, params: params)
         executeGetRequest(url, completionHandler: { data, error in
             if error != nil {
                 completionHandler(moviesResponse: nil, error: error)

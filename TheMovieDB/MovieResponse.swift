@@ -10,21 +10,21 @@ import Foundation
 
 class MovieResponse {
 
-    let backdropPath: String
+    let backdropPath: String?
     let id: Int
     let originalTitle: String
     let releaseDate: String
-    let posterPath: String
+    let posterPath: String?
     let title: String
     let voteAverage: Int
     let voteCount: Int
     
     init(response: NSDictionary){
-        backdropPath = response["backdrop_path"] as! String
+        backdropPath = response["backdrop_path"] as? String
         id = response["id"] as! Int
         originalTitle = response["original_title"] as! String
         releaseDate = response["release_date"] as! String
-        posterPath = response["poster_path"] as! String
+        posterPath = response["poster_path"] as? String
         title = response["title"] as! String
         voteAverage = response["vote_average"] as! Int
         voteCount = response["vote_count"] as! Int

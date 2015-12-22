@@ -282,7 +282,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j27-sd-xhR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="222" y="374"/>
+            <point key="canvasLocation" x="262" y="374"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="uxT-9a-4Kj">
@@ -419,7 +419,6 @@
                         <outlet property="btnFavorite" destination="bV9-xk-3su" id="WUQ-Qg-E9O"/>
                         <outlet property="btnWatchlist" destination="9W1-bq-BK4" id="c58-dD-8Sw"/>
                         <outlet property="imgPoster" destination="BM9-B6-uJO" id="1Rd-Q3-Z2d"/>
-                        <outlet property="topBar" destination="5ka-mK-noI" id="hGi-O9-H7H"/>
                         <segue destination="b0B-g1-qnQ" kind="modal" identifier="loginSegue" id="OiM-Ai-lJE"/>
                     </connections>
                 </viewController>
@@ -434,7 +433,7 @@
         <image name="ic_movies" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="MJv-Vy-yWt"/>
         <segue reference="acx-Cu-Uhx"/>
+        <segue reference="OiM-Ai-lJE"/>
     </inferredMetricsTieBreakers>
 </document>

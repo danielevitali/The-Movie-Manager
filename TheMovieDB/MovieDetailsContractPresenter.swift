@@ -12,7 +12,7 @@ protocol MovieDetailsContractPresenter {
     
     init(view: MovieDetailsContractView)
     
-    func getPosterUrl(movie: Movie) -> NSURL
+    func getPosterUrl(movie: Movie) -> NSURL?
     
     func isFavoriteMovie(movie: Movie) -> Bool
     

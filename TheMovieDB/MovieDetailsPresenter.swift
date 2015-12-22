@@ -18,8 +18,11 @@ class MovieDetailsPresenter: MovieDetailsContractPresenter {
         self.networkManager = NetworkManager.getInstance()
     }
     
-    func getPosterUrl(movie: Movie) -> NSURL {
-        return networkManager.getUrlForImage(movie.imageName, size: "original")
+    func getPosterUrl(movie: Movie) -> NSURL? {
+        if let imageName = movie.imageName {
+            return networkManager.getUrlForImage(imageName, size: "original")
+        }
+        return nil
     }
     
     func isFavoriteMovie(movie: Movie) -> Bool {
