@@ -27,17 +27,27 @@ class MovieDetailsViewController: UIViewController, MovieDetailsContractView {
         presenter = MovieDetailsPresenter(view: self)
         
         favorite = presenter.isFavoriteMovie(movie)
-        if favorite! {
+        if let favorite = favorite {
             btnFavorite.image = UIImage(named: "ic_favorite")
+            if favorite {
+                btnFavorite.style = UIBarButtonItemStyle.Plain
+            } else {
+                btnFavorite.style  = UIBarButtonItemStyle.Bordered
+            }
         } else {
-            btnFavorite.image = UIImage(named: "ic_favorite_border")
+            btnFavorite.image = nil
         }
         
         inWatchlist = presenter.isInWatchlistMovie(movie)
-        if inWatchlist! {
-            btnWatchlist.image = UIImage(named: "ic_watchlist")
+        if let inWatchlist = inWatchlist {
+            btnWatchlist.image = UIImage(named: "ic_list")
+            if inWatchlist {
+                btnWatchlist.style  = UIBarButtonItemStyle.Plain
+            } else {
+                btnWatchlist.style  = UIBarButtonItemStyle.Bordered
+            }
         } else {
-            btnWatchlist.image = UIImage(named: "ic_watchlist_border")
+            btnWatchlist.image = nil
         }
     }
     
@@ -49,11 +59,6 @@ class MovieDetailsViewController: UIViewController, MovieDetailsContractView {
         navigationItem.title = movie.title
     }
     
-    override func viewDidDisappear(animated: Bool) {
-        super.viewDidDisappear(animated)
-        presenter = nil
-    }
-    
     @IBAction func favoriteClick(sender: AnyObject) {
         if favorite! {
             presenter.removeFromFavoriteClick(movie)
@@ -63,10 +68,10 @@ class MovieDetailsViewController: UIViewController, MovieDetailsContractView {
     }
     
     @IBAction func watchlistClick(sender: AnyObject) {
-        if favorite! {
-            presenter.removeFromFavoriteClick(movie)
+        if inWatchlist! {
+            presenter.removeFromWatchlistClick(movie)
         } else {
-            presenter.addToFavoriteClick(movie)
+            presenter.addToWatchlistClick(movie)
         }
     }
     
@@ -76,7 +81,6 @@ class MovieDetailsViewController: UIViewController, MovieDetailsContractView {
         } else {
             activityIndicator.stopAnimating()
         }
-
     }
     
     func showLogin() {
@@ -85,22 +89,22 @@ class MovieDetailsViewController: UIViewController, MovieDetailsContractView {
     
     func movieAddedToFavorites() {
         favorite = true
-        btnFavorite.image = UIImage(named: "ic_favorite")
+        btnFavorite.style  = UIBarButtonItemStyle.Plain
     }
     
     func movieRemovedFromFavorites() {
         favorite = false
-        btnFavorite.image = UIImage(named: "ic_favorite_border")
+        btnFavorite.style  = UIBarButtonItemStyle.Bordered
     }
     
     func movieAddedToWatchlist() {
         inWatchlist = true
-        btnWatchlist.image = UIImage(named: "ic_watchlist")
+        btnWatchlist.style  = UIBarButtonItemStyle.Plain
     }
     
     func movieRemovedFromWatchlist() {
         inWatchlist = false
-        btnWatchlist.image = UIImage(named: "ic_watchlist_border")
+        btnWatchlist.style  = UIBarButtonItemStyle.Bordered
     }
     
     func disableWatchlistAndFavoriteButton() {

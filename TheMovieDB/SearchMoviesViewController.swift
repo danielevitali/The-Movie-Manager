@@ -31,11 +31,6 @@ class SearchMoviesViewController: UIViewController, UITableViewDataSource, UITab
         tblMovies.reloadData()
     }
     
-    override func viewDidDisappear(animated: Bool) {
-        super.viewDidDisappear(animated)
-        presenter = nil
-    }
-    
     func showNoMovieFound() {
         tblMovies.hidden = true
         lblEmptyList.hidden = false
@@ -49,14 +44,14 @@ class SearchMoviesViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        let text: NSString
-        if let textFieldText = textField.text {
-            text = textFieldText
-        } else {
-            text = ""
-        }
+        let text = textField.text! as NSString
         presenter.search(text.stringByReplacingCharactersInRange(range, withString: string))
         return true
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        view.endEditing(true)
+        return false
     }
     
     func showMovies(movies: [Movie]) {
